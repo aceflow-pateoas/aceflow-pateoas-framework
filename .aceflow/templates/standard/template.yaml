@@ -1,0 +1,112 @@
+# 标准模式项目模板
+# 适合中型项目和敏捷团队
+
+project:
+  name: "新建项目"
+  template: "standard"
+  team_size: "3-10人"
+  estimated_duration: "1-2周"
+  
+flow:
+  mode: "standard"
+  stages:
+    P1:
+      name: "需求分析"
+      deliverables:
+        - name: "用户故事"
+          template: "user_stories.md"
+          required: true
+        - name: "业务流程"
+          template: "business_flow.md"
+          required: true
+        - name: "需求规格"
+          template: "requirements_spec.md"
+          required: true
+      estimated_duration: "1-2天"
+      
+    P2:
+      name: "技术规划"
+      deliverables:
+        - name: "架构设计"
+          template: "architecture.md"
+          required: true
+        - name: "API设计"
+          template: "api_design.md"
+          required: true
+        - name: "开发计划"
+          template: "dev_plan.md"
+          required: true
+      estimated_duration: "1-2天"
+      
+    D1:
+      name: "功能实现"
+      deliverables:
+        - name: "核心模块"
+          template: "core_modules.md"
+          required: true
+        - name: "集成接口"
+          template: "integration.md"
+          required: true
+        - name: "单元测试"
+          template: "unit_tests.md"
+          required: true
+      estimated_duration: "3-5天"
+      
+    D2:
+      name: "质量验证"
+      deliverables:
+        - name: "测试套件"
+          template: "test_suite.md"
+          required: true
+        - name: "测试报告"
+          template: "test_report.md"
+          required: true
+        - name: "缺陷修复"
+          template: "bug_fixes.md"
+          required: true
+      estimated_duration: "2-3天"
+      
+    R1:
+      name: "发布评审"
+      deliverables:
+        - name: "代码评审"
+          template: "code_review.md"
+          required: true
+        - name: "性能评估"
+          template: "performance.md"
+          required: true
+        - name: "发布文档"
+          template: "release_docs.md"
+          required: true
+      estimated_duration: "1天"
+
+initialization:
+  prompts:
+    - key: "project_name"
+      question: "项目名称"
+      type: "text"
+      required: true
+    - key: "project_description"
+      question: "项目描述"
+      type: "text"
+      required: false
+    - key: "target_users"
+      question: "目标用户群体"
+      type: "text"
+      required: true
+    - key: "main_features"
+      question: "核心功能（用逗号分隔）"
+      type: "text"
+      required: true
+    - key: "tech_stack"
+      question: "技术栈偏好"
+      type: "select"
+      options: ["Java/Spring", "Python/Django", "Node.js/Express", "React/Vue", "其他"]
+      required: false
+  
+  setup_tasks:
+    - "创建完整目录结构"
+    - "初始化配置文件"
+    - "生成详细文档模板"
+    - "设置开发和测试环境"
+    - "配置持续集成"

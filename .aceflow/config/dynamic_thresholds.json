@@ -1,0 +1,33 @@
+{
+  "global": {
+    "time_adjustment_range": 20,
+    "memory_retention_days": 30
+  },
+  "stage_specific": {
+    "S3": {
+      "test_case_coverage": {
+        "default": 80,
+        "payment_module": 99,
+        "ui_module": 75
+      }
+    },
+    "S4": {
+      "unit_test_pass_rate": {
+        "default": 90,
+        "critical_task": 95,
+        "minor_task": 85
+      },
+      "code_coverage": {
+        "default": 80,
+        "security_module": 95
+      }
+    },
+    "S5": {
+      "defect_tolerance": {
+        "high_severity": 0,
+        "medium_severity": 3,
+        "low_severity": 5
+      }
+    }
+  }
+}

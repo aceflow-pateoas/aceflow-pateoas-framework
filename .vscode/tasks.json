@@ -1,0 +1,145 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "AceFlow: 检查项目状态",
+      "type": "shell",
+      "command": "python3",
+      "args": [".aceflow/scripts/aceflow", "status", "--format", "json"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "AceFlow: 智能工作流推荐",
+      "type": "shell",
+      "command": "python3",
+      "args": [".aceflow/scripts/aceflow", "suggest", "--task", "${input:taskDescription}", "--format", "json"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "AceFlow: 开始阶段",
+      "type": "shell",
+      "command": "python3",
+      "args": [".aceflow/scripts/aceflow", "start", "${input:stageName}", "--auto-docs"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "AceFlow: 更新进度",
+      "type": "shell",
+      "command": "python3",
+      "args": [".aceflow/scripts/aceflow", "progress", "--progress", "${input:progressPercentage}"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "AceFlow: 完成阶段",
+      "type": "shell",
+      "command": "python3",
+      "args": [".aceflow/scripts/aceflow", "complete", "${input:stageName}", "--generate"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "AceFlow: 启动Web界面",
+      "type": "shell",
+      "command": "python3",
+      "args": [".aceflow/scripts/aceflow", "web"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "taskDescription",
+      "description": "请描述你要完成的任务",
+      "default": "修复bug",
+      "type": "promptString"
+    },
+    {
+      "id": "stageName",
+      "description": "阶段名称（留空自动选择）",
+      "default": "",
+      "type": "promptString"
+    },
+    {
+      "id": "progressPercentage",
+      "description": "进度百分比（0-100）",
+      "default": "50",
+      "type": "promptString"
+    }
+  ]
+}

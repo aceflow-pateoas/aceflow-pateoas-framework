@@ -1,0 +1,190 @@
+# AceFlow代码质量规则
+# 定义项目的代码质量标准和最佳实践
+
+quality_rules:
+  code_standards:
+    naming_conventions:
+      - rule: "使用有意义的变量名"
+        pattern: "避免单字母变量名（除循环变量外）"
+        example: "user_count 而不是 n"
+      
+      - rule: "函数名使用动词开头"
+        pattern: "get_, set_, create_, update_, delete_"
+        example: "get_user_data() 而不是 user_data()"
+      
+      - rule: "常量使用大写字母"
+        pattern: "全大写，下划线分隔"
+        example: "MAX_RETRY_COUNT = 3"
+    
+    function_design:
+      - rule: "单一职责原则"
+        description: "每个函数只做一件事"
+        max_lines: 50
+      
+      - rule: "参数数量限制"
+        max_parameters: 5
+        suggestion: "超过5个参数考虑使用对象或字典"
+      
+      - rule: "返回值一致性"
+        description: "同一函数的所有返回路径应返回相同类型"
+    
+    documentation:
+      - rule: "公共函数必须有文档字符串"
+        required: true
+        format: "描述功能、参数、返回值"
+      
+      - rule: "复杂逻辑添加注释"
+        description: "超过10行的逻辑块应有注释说明"
+      
+      - rule: "TODO注释格式规范"
+        format: "# TODO: 描述 (责任人, 预期完成时间)"
+
+  security_rules:
+    input_validation:
+      - rule: "所有用户输入必须验证"
+        description: "防止SQL注入、XSS等攻击"
+      
+      - rule: "敏感数据不得硬编码"
+        examples: ["密码", "API密钥", "数据库连接字符串"]
+      
+      - rule: "使用参数化查询"
+        description: "防止SQL注入攻击"
+    
+    error_handling:
+      - rule: "不得暴露系统信息"
+        description: "错误信息不应包含文件路径、数据库结构等"
+      
+      - rule: "异常必须被处理"
+        description: "不允许空的except块"
+
+  performance_rules:
+    efficiency:
+      - rule: "避免在循环中重复计算"
+        description: "将不变的计算移到循环外"
+      
+      - rule: "合理使用数据结构"
+        description: "根据使用场景选择合适的数据结构"
+      
+      - rule: "数据库查询优化"
+        description: "避免N+1查询问题"
+    
+    resource_management:
+      - rule: "及时释放资源"
+        description: "文件、网络连接等资源使用后及时关闭"
+      
+      - rule: "避免内存泄漏"
+        description: "注意循环引用和大对象的使用"
+
+# 自动检查配置
+automated_checks:
+  linting:
+    enabled: true
+    tools:
+      python: ["flake8", "pylint", "black"]
+      javascript: ["eslint", "prettier"]
+      java: ["checkstyle", "spotbugs"]
+    
+    on_stage_change: true
+    block_on_errors: false
+    
+  testing:
+    required_coverage: 80
+    run_on_commit: true
+    test_types: ["unit", "integration"]
+    
+  security_scan:
+    enabled: true
+    tools: ["bandit", "safety"]
+    run_frequency: "weekly"
+
+# 代码评审规则
+code_review:
+  required_reviewers: 1
+  auto_assign: true
+  
+  checklist:
+    functionality:
+      - "代码实现了预期功能"
+      - "边界条件得到处理"
+      - "错误处理完善"
+    
+    quality:
+      - "代码可读性良好"
+      - "遵循项目编码规范"
+      - "适当的测试覆盖"
+    
+    security:
+      - "没有明显的安全漏洞"
+      - "输入验证充分"
+      - "敏感信息处理得当"
+    
+    performance:
+      - "没有明显的性能问题"
+      - "资源使用合理"
+      - "算法复杂度可接受"
+
+# 重构建议
+refactoring_guidelines:
+  when_to_refactor:
+    - "代码重复度超过30%"
+    - "函数超过50行"
+    - "类超过500行"
+    - "圈复杂度超过10"
+  
+  refactoring_techniques:
+    - name: "提取函数"
+      description: "将重复代码提取为独立函数"
+    
+    - name: "提取常量"
+      description: "将魔法数字和字符串提取为常量"
+    
+    - name: "简化条件表达式"
+      description: "使用卫语句减少嵌套"
+    
+    - name: "重命名变量"
+      description: "使用更有意义的变量名"
+
+# 技术债务管理
+technical_debt:
+  tracking:
+    enabled: true
+    markers: ["TODO", "FIXME", "HACK", "XXX"]
+    
+  categories:
+    - name: "设计债务"
+      description: "架构设计不合理"
+      priority: "high"
+    
+    - name: "代码债务"
+      description: "代码质量问题"
+      priority: "medium"
+    
+    - name: "测试债务"
+      description: "测试覆盖不足"
+      priority: "medium"
+    
+    - name: "文档债务"
+      description: "文档缺失或过时"
+      priority: "low"
+  
+  management:
+    review_frequency: "monthly"
+    allocation_percentage: 20  # 20%的开发时间用于偿还技术债务
+    
+# 质量指标
+quality_metrics:
+  code_coverage:
+    target: 80
+    minimum: 70
+    
+  complexity:
+    max_cyclomatic: 10
+    max_nesting_depth: 4
+    
+  maintainability:
+    max_function_length: 50
+    max_class_length: 500
+    max_file_length: 1000
+    
+  duplication:
+    max_duplicate_percentage: 5

@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "name": "AceFlow项目",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "cline.systemPrompt": "你是一个专门集成了AceFlow工作流管理系统的开发助手。每次对话开始时，请先检查项目的工作流状态：\n\n```bash\npython3 .aceflow/scripts/aceflow status --format json\n```\n\n基于项目状态，智能分析用户意图并提供工作流建议。对于开发任务，始终推荐合适的工作流模式（minimal/standard/complete）。",
+    "cline.autoRunSystemPrompt": true,
+    "cline.useClinerules": true,
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "files.exclude": {
+      ".aceflow/**/__pycache__": true,
+      ".aceflow/**/reports": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "saoudrizwan.claude-dev",
+      "ms-python.python",
+      "ms-vscode.vscode-json",
+      "redhat.vscode-yaml"
+    ]
+  }
+}

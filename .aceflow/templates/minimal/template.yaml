@@ -1,0 +1,65 @@
+# 轻量级模式项目模板
+# 适合小型团队和快速迭代
+
+project:
+  name: "新建项目"
+  template: "minimal"
+  team_size: "1-5人"
+  estimated_duration: "2-7天"
+  
+flow:
+  mode: "minimal"
+  stages:
+    P:
+      name: "规划阶段"
+      deliverables:
+        - name: "需求清单"
+          template: "requirements.md"
+          required: true
+        - name: "任务分解"
+          template: "tasks.md"
+          required: true
+      estimated_duration: "4-8小时"
+      
+    D:
+      name: "开发阶段"
+      deliverables:
+        - name: "功能实现"
+          template: "implementation.md"
+          required: true
+        - name: "基础测试"
+          template: "testing.md"
+          required: false
+      estimated_duration: "1-4天"
+      
+    R:
+      name: "评审阶段"
+      deliverables:
+        - name: "验收检查"
+          template: "review.md"
+          required: true
+        - name: "部署准备"
+          template: "deployment.md"
+          required: false
+      estimated_duration: "2-4小时"
+
+initialization:
+  prompts:
+    - key: "project_name"
+      question: "项目名称"
+      type: "text"
+      required: true
+    - key: "project_description"
+      question: "项目描述"
+      type: "text"
+      required: false
+    - key: "main_goal"
+      question: "主要目标"
+      type: "text"
+      required: true
+  
+  setup_tasks:
+    - "创建基础目录结构"
+    - "初始化配置文件"
+    - "生成README文档"
+    - "设置基础开发环境"

@@ -1,0 +1,210 @@
+name: "AceFlow工作流引擎"
+version: "2.0.0"
+description: "AI驱动的软件开发工作流管理工具，为敏捷团队提供智能流程建议"
+
+# 工具能力描述
+capabilities:
+  primary:
+    - "智能工作流程推荐"
+    - "任务分类和优先级建议"
+    - "开发阶段管理"
+    - "进度跟踪和预测"
+  secondary:
+    - "项目复杂度分析"
+    - "团队协作优化"
+    - "记忆管理和知识沉淀"
+    - "敏捷实践集成"
+
+# 使用时机判断
+when_to_use:
+  # 关键词触发
+  keywords:
+    chinese: ["工作流", "流程", "阶段", "任务管理", "项目规划", "敏捷开发", "流程优化"]
+    english: ["workflow", "process", "stage", "task management", "project planning", "agile"]
+  
+  # 场景描述
+  scenarios:
+    - "用户询问如何组织开发流程"
+    - "需要制定项目计划和里程碑"
+    - "想要标准化开发流程"
+    - "需要跟踪项目进度"
+    - "选择合适的开发模式"
+    - "优化团队协作效率"
+    - "制定质量保证流程"
+  
+  # 问题模式匹配
+  question_patterns:
+    - "如何.*开发流程"
+    - "制定.*项目计划"
+    - ".*工作流.*建议"
+    - "项目.*阶段.*管理"
+    - "选择.*开发模式"
+    - "how to.*workflow"
+    - "project.*planning"
+    - "development.*process"
+
+# CLI集成配置
+cli_integration:
+  # 命令发现
+  discovery:
+    command: "aceflow describe --format json"
+    description: "获取工具详细能力描述"
+  
+  # 核心命令
+  commands:
+    suggest:
+      description: "智能工作流推荐"
+      usage: "aceflow suggest --task '{task_description}' [options]"
+      example: "aceflow suggest --task '修复用户登录bug' --format json"
+      required_params: ["task"]
+      optional_params:
+        - name: "team-size"
+          type: "integer"
+          description: "团队规模"
+        - name: "project-type"
+          type: "string"
+          description: "项目类型"
+        - name: "urgency"
+          type: "string"
+          choices: ["low", "medium", "high"]
+          description: "紧急程度"
+    
+    plan:
+      description: "项目规划建议"
+      usage: "aceflow plan --project-type {type} --team-size {size} [options]"
+      example: "aceflow plan --project-type web --team-size 5 --format json"
+      required_params: []
+      optional_params:
+        - name: "project-type"
+          type: "string"
+          default: "web"
+          description: "项目类型"
+        - name: "team-size"
+          type: "integer"
+          default: 5
+          description: "团队规模"
+    
+    track:
+      description: "进度跟踪"
+      usage: "aceflow track [options]"
+      example: "aceflow track --stage current --format json"
+      required_params: []
+      optional_params:
+        - name: "stage"
+          type: "string"
+          default: "current"
+          description: "查询阶段"
+    
+    status:
+      description: "项目状态查询"
+      usage: "aceflow status [options]"
+      example: "aceflow status --format json"
+      required_params: []
+
+# 输出格式规范
+output_format:
+  default: "json"
+  supported: ["json", "yaml", "text"]
+  
+  # JSON响应结构
+  json_schema:
+    type: "object"
+    properties:
+      recommended_flow:
+        type: "string"
+        enum: ["minimal", "standard", "complete"]
+        description: "推荐的工作流模式"
+      confidence:
+        type: "number"
+        minimum: 0
+        maximum: 1
+        description: "推荐置信度"
+      reasoning:
+        type: "string"
+        description: "推荐理由和解释"
+      steps:
+        type: "array"
+        items:
+          type: "string"
+        description: "工作流步骤列表"
+      estimated_hours:
+        type: "integer"
+        minimum: 1
+        description: "预估工作时间（小时）"
+      alternatives:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            flow:
+              type: "string"
+            confidence:
+              type: "number"
+            reason:
+              type: "string"
+        description: "替代方案"
+      task_type:
+        type: "string"
+        description: "识别的任务类型"
+    required: ["recommended_flow", "confidence", "reasoning", "steps", "estimated_hours"]
+
+# Agent集成示例
+integration_examples:
+  # Cursor/VSCode集成
+  cursor:
+    trigger_context: "当用户询问开发流程或项目规划时"
+    command_template: "aceflow suggest --task '{user_input}' --format json"
+    response_handling: |
+      const response = await exec('aceflow suggest --task "修复登录bug" --format json');
+      const result = JSON.parse(response.stdout);
+      // 使用 result.recommended_flow, result.steps 等
+  
+  # Cline集成
+  cline:
+    trigger_context: "工作流相关查询"
+    command_template: "aceflow {action} {params} --format json"
+    response_format: "structured_json"
+  
+  # GitHub Copilot集成
+  copilot:
+    trigger_patterns: ["@aceflow", "workflow:", "process:"]
+    command_integration: "CLI调用模式"
+    output_integration: "JSON解析和建议生成"
+
+# 错误处理
+error_handling:
+  common_errors:
+    - code: "missing_task"
+      message: "任务描述不能为空"
+      solution: "请提供具体的任务描述"
+    - code: "invalid_project_type"
+      message: "不支持的项目类型"
+      solution: "支持的类型: web, mobile, api, desktop等"
+    - code: "project_not_initialized"
+      message: "项目未初始化"
+      solution: "请先运行 'aceflow init' 初始化项目"
+  
+  fallback_behavior:
+    - "返回默认标准流程建议"
+    - "提供错误信息和解决方案"
+    - "给出相关帮助命令"
+
+# 性能指标
+performance:
+  response_time: "<500ms"
+  memory_usage: "<50MB"
+  cpu_usage: "minimal"
+  dependencies: "轻量级，无外部API依赖"
+
+# 兼容性
+compatibility:
+  os: ["Windows", "macOS", "Linux"]
+  python: ">=3.7"
+  shell: ["bash", "zsh", "cmd", "powershell"]
+  editors: ["VSCode", "Cursor", "Vim", "IntelliJ"]
+
+# 更新和维护
+maintenance:
+  update_channel: "GitHub Releases"
+  backward_compatibility: "保持API稳定性"
+  deprecation_policy: "提前3个版本通知"

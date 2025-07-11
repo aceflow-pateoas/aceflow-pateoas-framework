@@ -1,0 +1,238 @@
+# 流程模式配置
+# 定义轻量级、标准、完整三种模式的阶段结构
+
+flow_modes:
+  minimal:
+    name: "轻量级模式"
+    description: "适合小型团队和快速迭代"
+    suitable_for: ["1-5人团队", "快速原型", "敏捷开发", "小型项目"]
+    duration: "2-7天"
+    stages:
+      P:
+        name: "规划"
+        description: "明确需求、设计方案、制定计划"
+        typical_duration: "4-8小时"
+        deliverables:
+          - "需求文档"
+          - "技术方案"
+          - "任务列表"
+        ai_guidance:
+          - "分析用户需求的核心价值"
+          - "推荐技术方案选型"
+          - "估算开发工作量"
+      D:
+        name: "开发"
+        description: "编码实现、测试验证、代码审查"
+        typical_duration: "1-4天"
+        deliverables:
+          - "功能代码"
+          - "测试用例"
+          - "代码文档"
+        ai_guidance:
+          - "推荐最佳编码实践"
+          - "检测潜在代码问题"
+          - "优化性能和可维护性"
+      R:
+        name: "评审"
+        description: "功能验证、性能测试、用户反馈"
+        typical_duration: "2-4小时"
+        deliverables:
+          - "测试报告"
+          - "评审记录"
+          - "改进建议"
+        ai_guidance:
+          - "分析功能完整性"
+          - "评估用户体验"
+          - "规划下一步优化"
+    workflow_pattern: "P→D→R"
+    
+  standard:
+    name: "标准模式"
+    description: "适合中型项目和敏捷团队"
+    suitable_for: ["3-10人团队", "企业应用", "复杂功能", "质量要求高"]
+    duration: "1-2周"
+    stages:
+      P1:
+        name: "需求分析"
+        description: "收集用户需求、分析业务场景"
+        typical_duration: "1-2天"
+        deliverables:
+          - "用户故事"
+          - "业务流程图"
+          - "需求规格说明"
+        ai_guidance:
+          - "识别核心业务需求"
+          - "分析用户使用场景"
+          - "评估需求可行性"
+      P2:
+        name: "技术规划"
+        description: "技术方案设计、任务分解"
+        typical_duration: "1-2天"
+        deliverables:
+          - "架构设计"
+          - "API设计"
+          - "开发计划"
+        ai_guidance:
+          - "推荐架构模式"
+          - "优化数据库设计"
+          - "制定开发里程碑"
+      D1:
+        name: "功能实现"
+        description: "核心功能开发、模块集成"
+        typical_duration: "3-5天"
+        deliverables:
+          - "核心模块代码"
+          - "集成接口"
+          - "单元测试"
+        ai_guidance:
+          - "监控开发进度"
+          - "检测代码质量"
+          - "建议重构优化"
+      D2:
+        name: "质量验证"
+        description: "单元测试、集成测试、用户测试"
+        typical_duration: "2-3天"
+        deliverables:
+          - "测试套件"
+          - "测试报告"
+          - "缺陷修复"
+        ai_guidance:
+          - "分析测试覆盖率"
+          - "识别潜在缺陷"
+          - "优化测试策略"
+      R1:
+        name: "发布评审"
+        description: "代码审查、性能评估、文档整理"
+        typical_duration: "1天"
+        deliverables:
+          - "代码审查报告"
+          - "性能测试报告"
+          - "发布文档"
+        ai_guidance:
+          - "评估发布准备度"
+          - "分析性能指标"
+          - "制定运维策略"
+    workflow_pattern: "P1→P2→D1→D2→R1"
+    
+  complete:
+    name: "完整模式"
+    description: "适合大型项目和企业级应用"
+    suitable_for: ["10+人团队", "关键系统", "严格质量控制", "合规要求"]
+    duration: "2-4周"
+    stages:
+      S1:
+        name: "用户故事"
+        description: "收集和分析用户需求"
+        typical_duration: "2-3天"
+        deliverables:
+          - "用户故事地图"
+          - "验收标准"
+          - "优先级排序"
+        ai_guidance:
+          - "分析用户画像"
+          - "识别核心用户价值"
+          - "优化用户体验流程"
+      S2:
+        name: "任务拆分"
+        description: "技术任务分解和规划"
+        typical_duration: "2-3天"
+        deliverables:
+          - "工作分解结构"
+          - "技术任务清单"
+          - "依赖关系图"
+        ai_guidance:
+          - "优化任务分解粒度"
+          - "识别关键路径"
+          - "平衡团队工作负载"
+      S3:
+        name: "测试用例"
+        description: "设计测试策略和用例"
+        typical_duration: "2-3天"
+        deliverables:
+          - "测试计划"
+          - "测试用例库"
+          - "自动化测试框架"
+        ai_guidance:
+          - "提升测试覆盖率"
+          - "优化测试策略"
+          - "推荐测试工具"
+      S4:
+        name: "功能实现"
+        description: "核心功能开发"
+        typical_duration: "5-8天"
+        deliverables:
+          - "功能模块代码"
+          - "API接口实现"
+          - "数据库脚本"
+        ai_guidance:
+          - "监控代码质量"
+          - "检测安全漏洞"
+          - "优化性能表现"
+      S5:
+        name: "测试执行"
+        description: "全面测试验证"
+        typical_duration: "3-5天"
+        deliverables:
+          - "测试执行报告"
+          - "缺陷跟踪记录"
+          - "性能测试报告"
+        ai_guidance:
+          - "分析测试结果"
+          - "预测缺陷趋势"
+          - "优化测试效率"
+      S6:
+        name: "代码评审"
+        description: "代码质量审查"
+        typical_duration: "2-3天"
+        deliverables:
+          - "代码审查报告"
+          - "重构建议"
+          - "最佳实践文档"
+        ai_guidance:
+          - "检测代码异味"
+          - "推荐重构策略"
+          - "评估技术债务"
+      S7:
+        name: "演示反馈"
+        description: "用户演示和反馈收集"
+        typical_duration: "1-2天"
+        deliverables:
+          - "演示材料"
+          - "用户反馈报告"
+          - "改进计划"
+        ai_guidance:
+          - "分析用户反馈"
+          - "识别改进优先级"
+          - "预测用户接受度"
+      S8:
+        name: "总结归档"
+        description: "项目总结和知识归档"
+        typical_duration: "1天"
+        deliverables:
+          - "项目总结报告"
+          - "知识库更新"
+          - "最佳实践提取"
+        ai_guidance:
+          - "提取项目经验"
+          - "识别可复用模式"
+          - "建设团队知识库"
+    workflow_pattern: "S1→S2→S3→S4→S5→S6→S7→S8"
+
+# 流程模式切换映射
+mode_transitions:
+  minimal_to_standard:
+    P: [P1, P2]
+    D: [D1, D2]
+    R: [R1]
+  
+  standard_to_complete:
+    P1: [S1]
+    P2: [S2]
+    D1: [S3, S4]
+    D2: [S5]
+    R1: [S6, S7, S8]
+  
+  complete_to_minimal:
+    "[S1,S2]": P
+    "[S3,S4,S5]": D
+    "[S6,S7,S8]": R

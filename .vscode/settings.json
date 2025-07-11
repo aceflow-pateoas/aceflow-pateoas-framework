@@ -1,0 +1,56 @@
+{
+  "cline.systemPrompt": "You are an AceFlow-integrated development assistant. Always check project workflow status and provide intelligent workflow guidance. Use `python3 .aceflow/scripts/aceflow status` to check current project state before making suggestions.",
+  "cline.autoRunSystemPrompt": true,
+  "cline.useClinerules": true,
+  "cline.enableWorkflowIntegration": true,
+  
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.env.linux": {
+    "ACEFLOW_ENABLE": "true",
+    "ACEFLOW_CLI_FORMAT": "json"
+  },
+  
+  "files.associations": {
+    "*.aceflow": "yaml",
+    ".clinerules/**/*.md": "markdown"
+  },
+  
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.aceflow": "*.aceflow.*",
+    "aceflow.yaml": "aceflow.*.yaml",
+    "project_state.json": "project_state.*.json"
+  },
+  
+  "search.exclude": {
+    ".aceflow/**/__pycache__": true,
+    ".aceflow/**/reports": true
+  },
+  
+  "files.watcherExclude": {
+    ".aceflow/**/__pycache__": true,
+    ".aceflow/**/reports": true
+  },
+  
+  "aceflow.integration": {
+    "enabled": true,
+    "autoDetectProjectStatus": true,
+    "showWorkflowSuggestions": true,
+    "formatOutput": "json"
+  },
+  
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#2b7489",
+    "statusBar.foreground": "#ffffff",
+    "statusBar.noFolderBackground": "#2b7489"
+  },
+  
+  "tasks.version": "2.0.0",
+  "tasks.options": {
+    "cwd": "${workspaceFolder}"
+  }
+}

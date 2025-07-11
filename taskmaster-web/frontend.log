@@ -1,0 +1,23 @@
+
+> taskmaster-web@1.0.0 dev
+> vite
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+  VITE v5.4.19  ready in 748 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+11:10:35 PM [vite] hmr update /src/views/Tasks.vue
+11:10:46 PM [vite] hmr update /src/views/Tasks.vue
+11:11:02 PM [vite] hmr update /src/views/Tasks.vue
+11:11:41 PM [vite] hmr update /src/views/Tasks.vue
+11:13:04 PM [vite] page reload src/main.js
+11:15:44 PM [vite] hmr update /src/views/Tasks.vue
+11:15:59 PM [vite] hmr update /src/views/Tasks.vue
+11:17:52 PM [vite] hmr update /src/views/Tasks.vue
+11:18:04 PM [vite] hmr update /src/views/Tasks.vue
+11:18:17 PM [vite] hmr update /src/views/Tasks.vue
+11:24:29 PM [vite] hmr update /src/views/Tasks.vue
+11:24:50 PM [vite] hmr update /src/views/Tasks.vue
+11:30:29 PM [vite] hmr update /src/views/Tasks.vue

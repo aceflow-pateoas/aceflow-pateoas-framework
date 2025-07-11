@@ -1,0 +1,69 @@
+project:
+  id: "aceflow_taskmaster_001"
+  name: "TaskMaster AceFlow项目"
+  description: "基于AceFlow v3.0的任务管理系统"
+  version: "1.0.0"
+  created_at: "2025-07-11T10:00:00Z"
+  technology_stack:
+    - javascript
+    - nodejs
+    - vue
+    - sqlite
+    - api
+
+aceflow:
+  version: "3.0.0"
+  default_mode: "smart"
+  auto_mode_selection: true
+  ai_assistance_level: "L2"  # L1=建议, L2=执行, L3=自主
+
+workflow:
+  iteration_prefix: "iter"
+  auto_generate_iteration_id: true
+  stage_timeout_hours: 24
+  auto_progress_tracking: true
+  quality_gates_enabled: true
+
+team:
+  size: 1
+  roles:
+    - "Full Stack Developer"
+  collaboration_mode: "individual"
+
+output:
+  base_path: "./aceflow_result"
+  file_format: "markdown"
+  include_timestamps: true
+  auto_backup: true
+  retention_days: 90
+
+ai:
+  providers:
+    primary: "claude"
+    fallback: "openai"
+    local_llm: false
+  confidence_threshold: 0.8
+  auto_execution_threshold: 0.9
+
+quality:
+  code_review:
+    required: true
+    auto_analysis: true
+  testing:
+    min_coverage: 80
+    auto_test: true
+  security:
+    vulnerability_scan: true
+    secrets_detection: true
+
+integrations:
+  ide:
+    enabled: true
+    type: "vscode"
+    auto_sync: true
+  git:
+    enabled: true
+    auto_commit: false
+  ci_cd:
+    enabled: false
+    type: "github_actions"

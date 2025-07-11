@@ -1,0 +1,50 @@
+# AceFlow v2.0 核心配置
+# 项目级配置文件
+
+project:
+  name: "aceflow-pateoas-framework"
+  version: "2.0.0"
+  created_at: "2025-07-10"
+  team_size: "1-5人"
+  project_type: "framework"
+  
+flow:
+  mode: "minimal"  # minimal | standard | complete
+  auto_switch: true
+  current_stage: null
+  workflow_pattern: "P→D→R"
+  
+agile:
+  enabled: true
+  framework: "scrum"  # scrum | kanban | custom
+  iteration_length: "2weeks"
+  ceremonies:
+    planning: true
+    daily_standup: true
+    review: true
+    retrospective: true
+    
+ai:
+  enabled: true
+  auto_recommendations: true
+  decision_engine: "enhanced"
+  memory_system: "vector_based"
+  
+web:
+  enabled: true
+  port: 8080
+  auto_open: true
+  
+notifications:
+  enabled: true
+  channels: ["console", "web"]
+  
+memory:
+  retention_days: 90
+  auto_cleanup: true
+  vector_search: true
+  
+performance:
+  cache_enabled: true
+  cache_ttl: 3600
+  max_memory_mb: 512

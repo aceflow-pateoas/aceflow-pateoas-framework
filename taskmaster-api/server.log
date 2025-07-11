@@ -1,0 +1,8 @@
+
+> taskmaster-api@1.0.0 start
+> node src/app.js
+
+TaskMaster API running on port 3000
+Health check: http://localhost:3000/health
+Connected to SQLite database
+Terminated

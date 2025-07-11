@@ -1,0 +1,352 @@
+# AceFlow 敏捷集成配置
+# 支持Scrum、Kanban等敏捷框架与AceFlow的深度集成
+
+agile_frameworks:
+  # Scrum框架集成
+  scrum:
+    name: "Scrum"
+    description: "迭代式敏捷开发框架"
+    
+    # Sprint配置
+    sprint_config:
+      default_length: "2weeks"
+      available_lengths: ["1week", "2weeks", "3weeks", "4weeks"]
+      planning_time: "4hours"  # Sprint Planning时间
+      review_time: "2hours"    # Sprint Review时间
+      retro_time: "1hour"      # Sprint Retrospective时间
+      
+    # 仪式映射到AceFlow阶段
+    ceremonies_mapping:
+      sprint_planning:
+        aceflow_stage: "P"  # 规划阶段
+        duration: "2-4小时"
+        participants: ["PO", "SM", "开发团队"]
+        outputs:
+          - "Sprint目标"
+          - "Sprint Backlog"
+          - "任务分解"
+          
+      daily_standup:
+        aceflow_stage: "D"  # 开发阶段检查点
+        duration: "15分钟"
+        frequency: "每日"
+        participants: ["开发团队", "SM"]
+        questions:
+          - "昨天完成了什么？"
+          - "今天计划做什么？"
+          - "遇到什么阻碍？"
+          
+      sprint_review:
+        aceflow_stage: "R"  # 评审阶段
+        duration: "1-2小时"
+        participants: ["全体成员", "利益相关者"]
+        outputs:
+          - "产品增量演示"
+          - "反馈收集"
+          - "Product Backlog调整"
+          
+      sprint_retrospective:
+        aceflow_stage: "R"  # 评审阶段后续
+        duration: "1小时"
+        participants: ["Scrum团队"]
+        outputs:
+          - "改进行动项"
+          - "团队反思"
+          - "流程优化建议"
+    
+    # 角色定义
+    roles:
+      product_owner:
+        name: "产品负责人"
+        responsibilities:
+          - "管理Product Backlog"
+          - "定义验收标准"
+          - "确定优先级"
+        aceflow_permissions:
+          - "创建用户故事"
+          - "审批需求变更"
+          - "验收最终交付"
+          
+      scrum_master:
+        name: "Scrum Master"
+        responsibilities:
+          - "促进Scrum流程"
+          - "移除阻碍"
+          - "指导团队"
+        aceflow_permissions:
+          - "管理流程配置"
+          - "查看所有阶段状态"
+          - "协调跨阶段协作"
+          
+      development_team:
+        name: "开发团队"
+        responsibilities:
+          - "交付产品增量"
+          - "自组织工作"
+          - "持续改进"
+        aceflow_permissions:
+          - "更新开发进度"
+          - "记录技术决策"
+          - "执行测试验证"
+    
+    # AceFlow阶段与Sprint的映射
+    stage_sprint_mapping:
+      # 轻量级模式映射
+      minimal_mode:
+        "P": 
+          sprint_phase: "Sprint Planning"
+          typical_duration: "20%"  # Sprint时间的20%
+          key_activities:
+            - "Story refinement"
+            - "Task breakdown"
+            - "Sprint goal setting"
+            
+        "D":
+          sprint_phase: "Sprint Execution"
+          typical_duration: "70%"  # Sprint时间的70%
+          key_activities:
+            - "Daily development"
+            - "Daily standups"
+            - "Continuous integration"
+            
+        "R":
+          sprint_phase: "Sprint Review & Retro"
+          typical_duration: "10%"  # Sprint时间的10%
+          key_activities:
+            - "Sprint review"
+            - "Retrospective"
+            - "Next sprint preparation"
+
+  # Kanban框架集成
+  kanban:
+    name: "Kanban"
+    description: "持续流动的敏捷开发方法"
+    
+    # 看板配置
+    board_config:
+      default_lanes:
+        - id: "backlog"
+          name: "待办事项"
+          aceflow_stage: null
+          wip_limit: null
+          
+        - id: "planning"
+          name: "规划中"
+          aceflow_stage: "P"
+          wip_limit: 3
+          
+        - id: "development"
+          name: "开发中"
+          aceflow_stage: "D"
+          wip_limit: 5
+          
+        - id: "review"
+          name: "评审中"
+          aceflow_stage: "R"
+          wip_limit: 2
+          
+        - id: "done"
+          name: "已完成"
+          aceflow_stage: null
+          wip_limit: null
+      
+      # WIP限制策略
+      wip_limits:
+        team_based:
+          "1-3人": {"planning": 2, "development": 3, "review": 1}
+          "4-6人": {"planning": 3, "development": 5, "review": 2}
+          "7+人": {"planning": 4, "development": 7, "review": 3}
+        
+        complexity_based:
+          "简单任务": {"multiplier": 0.8}
+          "中等任务": {"multiplier": 1.0}
+          "复杂任务": {"multiplier": 1.5}
+    
+    # 持续改进指标
+    metrics:
+      cycle_time:
+        definition: "从开始到完成的总时间"
+        target: "<= 5天"
+        measurement: "自动计算"
+        
+      lead_time:
+        definition: "从需求提出到交付的时间"
+        target: "<= 10天"
+        measurement: "自动计算"
+        
+      throughput:
+        definition: "单位时间完成的工作项数量"
+        target: ">= 2项/周"
+        measurement: "周期性统计"
+        
+      wip_compliance:
+        definition: "WIP限制的遵守情况"
+        target: ">= 90%"
+        measurement: "实时监控"
+
+# 通用敏捷配置
+common_agile_config:
+  # 迭代配置
+  iteration:
+    auto_create_next: true
+    burndown_tracking: true
+    velocity_calculation: true
+    retrospective_template: "standard"
+    
+  # 估算方法
+  estimation:
+    methods: ["故事点", "T恤尺寸", "理想天"]
+    default_method: "故事点"
+    fibonacci_scale: [1, 2, 3, 5, 8, 13, 21]
+    planning_poker: true
+    
+  # 报告配置
+  reporting:
+    daily_reports: true
+    sprint_reports: true
+    velocity_charts: true
+    burndown_charts: true
+    cumulative_flow: true  # Kanban特有
+    
+  # 通知配置
+  notifications:
+    sprint_start: true
+    sprint_end: true
+    wip_limit_exceeded: true
+    blocked_items: true
+    overdue_tasks: true
+
+# 工具集成配置
+tool_integrations:
+  # Jira集成
+  jira:
+    enabled: false
+    api_endpoint: ""
+    authentication:
+      type: "token"  # token | oauth | basic
+      credentials: {}
+    sync_settings:
+      bidirectional: true
+      sync_frequency: "hourly"
+      field_mapping:
+        aceflow_stage: "status"
+        aceflow_progress: "progress"
+        aceflow_assignee: "assignee"
+        
+  # Azure DevOps集成
+  azure_devops:
+    enabled: false
+    organization: ""
+    project: ""
+    sync_settings:
+      work_item_types: ["User Story", "Task", "Bug"]
+      area_path: ""
+      iteration_path: ""
+      
+  # GitHub项目集成
+  github_projects:
+    enabled: false
+    repository: ""
+    project_number: null
+    sync_settings:
+      issue_sync: true
+      pr_sync: true
+      milestone_sync: true
+
+# 自定义敏捷框架模板
+custom_framework_template:
+  name: "自定义框架"
+  description: "根据团队需要自定义的敏捷框架"
+  
+  # 必需配置项
+  required_config:
+    - name: "iteration_length"
+      type: "duration"
+      description: "迭代周期长度"
+      
+    - name: "ceremonies"
+      type: "list"
+      description: "关键仪式列表"
+      
+    - name: "roles"
+      type: "list"
+      description: "团队角色定义"
+      
+    - name: "workflow_stages"
+      type: "list"
+      description: "工作流阶段"
+  
+  # 可选配置项
+  optional_config:
+    - name: "metrics"
+      type: "object"
+      description: "关键指标定义"
+      
+    - name: "tools"
+      type: "list"
+      description: "使用的工具列表"
+      
+    - name: "artifacts"
+      type: "list"
+      description: "产出物定义"
+
+# 敏捷成熟度评估
+maturity_assessment:
+  levels:
+    level_1:
+      name: "起步级"
+      description: "刚开始采用敏捷实践"
+      indicators:
+        - "基础敏捷仪式实施"
+        - "团队角色明确"
+        - "简单的迭代规划"
+      recommendations:
+        - "专注于基础实践"
+        - "建立团队信任"
+        - "简化流程"
+        
+    level_2:
+      name: "发展级"
+      description: "敏捷实践逐渐成熟"
+      indicators:
+        - "稳定的迭代节奏"
+        - "有效的回顾改进"
+        - "基础指标跟踪"
+      recommendations:
+        - "引入高级实践"
+        - "优化团队协作"
+        - "数据驱动改进"
+        
+    level_3:
+      name: "成熟级"
+      description: "敏捷实践高度成熟"
+      indicators:
+        - "自组织团队"
+        - "持续改进文化"
+        - "价值交付优化"
+      recommendations:
+        - "探索创新实践"
+        - "跨团队协作"
+        - "组织级敏捷"
+
+# 配置验证规则
+validation_rules:
+  sprint_length:
+    min: "1week"
+    max: "4weeks"
+    recommended: "2weeks"
+    
+  wip_limits:
+    min_ratio: 0.5  # 最小WIP限制相对团队大小
+    max_ratio: 2.0  # 最大WIP限制相对团队大小
+    
+  ceremony_duration:
+    planning:
+      ratio: 0.05  # Sprint长度的5%
+      max: "8hours"
+    review:
+      ratio: 0.025  # Sprint长度的2.5%
+      max: "4hours"
+    retrospective:
+      ratio: 0.0125  # Sprint长度的1.25%
+      max: "3hours"

@@ -1,0 +1,34 @@
+{
+  "workflow_rules": {
+    "full_workflow": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"],
+    "quick_workflow": ["S2", "S4", "S5", "S8"],
+    "change_workflow": ["S1", "S2", "S3", "S4"],
+    "emergency_workflow": ["S4", "S5", "S6", "S8"]
+  },
+  "memory_pool_config": {
+    "storage_path": "./.aceflow/memory_pool",
+    "retention_policy": "critical_forever,temporary_7d"
+  },
+  "abnormality_mapping": {
+    "需求变更": {
+      "impact_stages": ["S1", "S2", "S3"],
+      "handling_flow": "change_workflow",
+      "auto_trigger": true
+    },
+    "性能不达标": {
+      "impact_stages": ["S4", "S3"],
+      "handling_flow": "performance_optimization_subflow",
+      "auto_trigger": true
+    },
+    "架构问题": {
+      "impact_stages": ["S2", "S4"],
+      "handling_flow": "architecture_review_subflow",
+      "auto_trigger": true
+    }
+  },
+  "ai_decision_config": {
+    "trust_level": "L2",
+    "decision_log_path": ".aceflow/logs/ai_decisions.log",
+    "success_threshold": 0.85
+  }
+}

@@ -1,0 +1,319 @@
+#!/usr/bin/env python3
+"""
+AceFlow v3.0 CLI 工具
+主要功能：项目管理、流程控制、AI辅助
+"""
+
+import json
+import os
+import sys
+import argparse
+import yaml
+from datetime import datetime
+from pathlib import Path
+
+class AceFlowCLI:
+    def __init__(self):
+        self.project_root = Path.cwd()
+        self.aceflow_dir = self.project_root / ".aceflow"
+        self.state_file = self.aceflow_dir / "state" / "project_state.json"
+        self.config_file = self.aceflow_dir / "config" / "project.yaml"
+    
+    def load_state(self):
+        """加载项目状态"""
+        if self.state_file.exists():
+            with open(self.state_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        return {}
+    
+    def save_state(self, state):
+        """保存项目状态"""
+        state['last_updated'] = datetime.now().isoformat()
+        with open(self.state_file, 'w', encoding='utf-8') as f:
+            json.dump(state, f, indent=2, ensure_ascii=False)
+    
+    def load_config(self):
+        """加载项目配置"""
+        if self.config_file.exists():
+            with open(self.config_file, 'r', encoding='utf-8') as f:
+                return yaml.safe_load(f)
+        return {}
+    
+    def init_project(self, mode='smart'):
+        """初始化 AceFlow 项目"""
+        print(f"🚀 初始化 AceFlow v3.0 项目...")
+        
+        # 创建目录结构
+        dirs = [
+            '.aceflow/config',
+            '.aceflow/state',
+            '.aceflow/scripts',
+            '.aceflow/templates',
+            '.aceflow/memory',
+            'aceflow_result'
+        ]
+        
+        for dir_path in dirs:
+            os.makedirs(dir_path, exist_ok=True)
+        
+        # 初始化状态
+        state = {
+            "project_id": f"aceflow_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            "flow_mode": mode,
+            "selected_mode": None,
+            "current_stage": None,
+            "overall_progress": 0,
+            "created_at": datetime.now().isoformat(),
+            "version": "3.0.0"
+        }
+        
+        self.save_state(state)
+        print(f"✅ AceFlow 项目初始化完成！模式: {mode}")
+        return state
+    
+    def status(self, format_type='text', verbose=False):
+        """查看项目状态"""
+        if not self.aceflow_dir.exists():
+            print("❌ 未检测到 AceFlow 项目，请先运行 'aceflow init'")
+            return
+        
+        state = self.load_state()
+        config = self.load_config()
+        
+        if format_type == 'json':
+            print(json.dumps(state, indent=2, ensure_ascii=False))
+        else:
+            self._print_status_text(state, config, verbose)
+    
+    def _print_status_text(self, state, config, verbose):
+        """打印文本格式的状态"""
+        print("\n📊 AceFlow 项目状态")
+        print("=" * 40)
+        print(f"项目ID: {state.get('project_id', 'N/A')}")
+        print(f"流程模式: {state.get('flow_mode', 'N/A')}")
+        print(f"当前阶段: {state.get('current_stage', '未开始')}")
+        print(f"整体进度: {state.get('overall_progress', 0)}%")
+        print(f"最后更新: {state.get('last_updated', 'N/A')}")
+        
+        if verbose:
+            print(f"\n📋 详细信息:")
+            print(f"版本: {state.get('version', 'N/A')}")
+            print(f"创建时间: {state.get('created_at', 'N/A')}")
+            print(f"配置文件: {self.config_file}")
+            print(f"状态文件: {self.state_file}")
+    
+    def analyze(self, task_description):
+        """AI 任务分析"""
+        print(f"🧠 正在分析任务: {task_description}")
+        
+        # 简单的任务分类逻辑
+        keywords = {
+            'bug': ['修复', 'fix', 'bug', '问题', '错误'],
+            'feature': ['新功能', '开发', '实现', '添加', '功能'],
+            'refactor': ['重构', '优化', '改进', '重写'],
+            'project': ['项目', '系统', '平台', '架构']
+        }
+        
+        task_type = 'unknown'
+        for category, kw_list in keywords.items():
+            if any(kw in task_description.lower() for kw in kw_list):
+                task_type = category
+                break
+        
+        # 推荐模式
+        mode_mapping = {
+            'bug': 'minimal',
+            'feature': 'standard',
+            'refactor': 'standard',
+            'project': 'complete',
+            'unknown': 'smart'
+        }
+        
+        recommended_mode = mode_mapping.get(task_type, 'smart')
+        
+        result = {
+            'task_description': task_description,
+            'task_type': task_type,
+            'recommended_mode': recommended_mode,
+            'confidence': 0.85,
+            'analysis_time': datetime.now().isoformat()
+        }
+        
+        print(f"📊 分析结果:")
+        print(f"  任务类型: {task_type}")
+        print(f"  推荐模式: {recommended_mode}")
+        print(f"  置信度: 85%")
+        
+        return result
+    
+    def start(self, description=None, mode=None):
+        """开始新的工作流"""
+        state = self.load_state()
+        
+        if not description:
+            description = input("请描述您要开始的任务: ")
+        
+        if not mode:
+            # 智能分析推荐模式
+            analysis = self.analyze(description)
+            mode = analysis['recommended_mode']
+        
+        # 生成迭代ID
+        iteration_id = f"iter_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        
+        # 更新状态
+        state.update({
+            'selected_mode': mode,
+            'current_stage': self._get_first_stage(mode),
+            'iteration_id': iteration_id,
+            'task_description': description,
+            'overall_progress': 0,
+            'stage_progress': 0
+        })
+        
+        self.save_state(state)
+        
+        # 创建结果目录
+        result_dir = Path(f"aceflow_result/{iteration_id}")
+        result_dir.mkdir(parents=True, exist_ok=True)
+        
+        print(f"🚀 开始 AceFlow 工作流")
+        print(f"  任务描述: {description}")
+        print(f"  选择模式: {mode}")
+        print(f"  迭代ID: {iteration_id}")
+        print(f"  当前阶段: {state['current_stage']}")
+        print(f"  结果目录: {result_dir}")
+        
+        return state
+    
+    def _get_first_stage(self, mode):
+        """获取模式的第一个阶段"""
+        stage_mapping = {
+            'minimal': 'P',
+            'standard': 'P1',
+            'complete': 'S1',
+            'smart': 'S1'
+        }
+        return stage_mapping.get(mode, 'S1')
+    
+    def progress(self, stage, percentage):
+        """更新进度"""
+        state = self.load_state()
+        
+        if stage == 'current':
+            stage = state.get('current_stage')
+        
+        if not stage:
+            print("❌ 未找到当前阶段")
+            return
+        
+        state['stage_progress'] = percentage
+        # 简单的整体进度计算
+        state['overall_progress'] = min(percentage, 100)
+        
+        self.save_state(state)
+        
+        print(f"📈 进度更新: {stage} -> {percentage}%")
+        return state
+    
+    def complete(self, stage=None):
+        """完成阶段"""
+        state = self.load_state()
+        
+        if not stage:
+            stage = state.get('current_stage')
+        
+        if not stage:
+            print("❌ 未找到当前阶段")
+            return
+        
+        print(f"✅ 完成阶段: {stage}")
+        
+        # 更新状态
+        state['stage_progress'] = 100
+        
+        # 移动到下一阶段
+        next_stage = self._get_next_stage(stage, state.get('selected_mode'))
+        if next_stage:
+            state['current_stage'] = next_stage
+            state['stage_progress'] = 0
+            print(f"➡️  进入下一阶段: {next_stage}")
+        else:
+            print("🎉 所有阶段完成！")
+            state['current_stage'] = None
+            state['overall_progress'] = 100
+        
+        self.save_state(state)
+        return state
+    
+    def _get_next_stage(self, current_stage, mode):
+        """获取下一个阶段"""
+        stage_flows = {
+            'minimal': ['P', 'D', 'R'],
+            'standard': ['P1', 'P2', 'D1', 'D2', 'R1'],
+            'complete': ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'],
+            'smart': ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8']
+        }
+        
+        flow = stage_flows.get(mode, [])
+        if current_stage in flow:
+            current_index = flow.index(current_stage)
+            if current_index + 1 < len(flow):
+                return flow[current_index + 1]
+        
+        return None
+
+def main():
+    parser = argparse.ArgumentParser(description='AceFlow v3.0 CLI 工具')
+    subparsers = parser.add_subparsers(dest='command', help='可用命令')
+    
+    # init 命令
+    init_parser = subparsers.add_parser('init', help='初始化项目')
+    init_parser.add_argument('--mode', choices=['smart', 'minimal', 'standard', 'complete'], 
+                           default='smart', help='流程模式')
+    
+    # status 命令
+    status_parser = subparsers.add_parser('status', help='查看状态')
+    status_parser.add_argument('--format', choices=['text', 'json'], default='text', help='输出格式')
+    status_parser.add_argument('--verbose', action='store_true', help='详细输出')
+    
+    # analyze 命令
+    analyze_parser = subparsers.add_parser('analyze', help='分析任务')
+    analyze_parser.add_argument('task', help='任务描述')
+    
+    # start 命令
+    start_parser = subparsers.add_parser('start', help='开始工作流')
+    start_parser.add_argument('--description', help='任务描述')
+    start_parser.add_argument('--mode', choices=['smart', 'minimal', 'standard', 'complete'], 
+                            help='流程模式')
+    
+    # progress 命令
+    progress_parser = subparsers.add_parser('progress', help='更新进度')
+    progress_parser.add_argument('stage', help='阶段名称')
+    progress_parser.add_argument('percentage', type=int, help='进度百分比')
+    
+    # complete 命令
+    complete_parser = subparsers.add_parser('complete', help='完成阶段')
+    complete_parser.add_argument('stage', nargs='?', default='current', help='阶段名称')
+    
+    args = parser.parse_args()
+    
+    cli = AceFlowCLI()
+    
+    if args.command == 'init':
+        cli.init_project(args.mode)
+    elif args.command == 'status':
+        cli.status(args.format, args.verbose)
+    elif args.command == 'analyze':
+        cli.analyze(args.task)
+    elif args.command == 'start':
+        cli.start(args.description, args.mode)
+    elif args.command == 'progress':
+        cli.progress(args.stage, args.percentage)
+    elif args.command == 'complete':
+        cli.complete(args.stage)
+    else:
+        parser.print_help()
+
+if __name__ == '__main__':
+    main()

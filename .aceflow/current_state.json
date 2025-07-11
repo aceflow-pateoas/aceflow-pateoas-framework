@@ -1,0 +1,27 @@
+{
+  "current_stage": "S5",
+  "stage_status": {
+    "S1": "completed",
+    "S2": "completed",
+    "S3": "in_progress",
+    "S4": "completed",
+    "S5": "in_progress",
+    "S6": "completed",
+    "S7": "in_progress",
+    "S8": "not_started"
+  },
+  "progress": {
+    "S1": 100,
+    "S2": 100,
+    "S3": 100,
+    "S4": 100,
+    "S5": 100,
+    "S6": 100,
+    "S7": 0,
+    "S8": 0
+  },
+  "memory_ids": [],
+  "last_updated": "2025-07-06T18:25:18.636818",
+  "abnormalities": [],
+  "workflow_type": "完整流程"
+}

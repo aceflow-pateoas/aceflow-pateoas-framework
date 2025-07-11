@@ -1,0 +1,247 @@
+# 敏捷框架集成配置
+# 支持Scrum和Kanban框架的集成
+
+agile_frameworks:
+  scrum:
+    name: "Scrum"
+    description: "迭代式敏捷开发框架"
+    
+    ceremonies:
+      sprint_planning:
+        name: "Sprint规划会议"
+        duration: "2-4小时"
+        participants: ["产品负责人", "Scrum Master", "开发团队"]
+        aceflow_mapping: "P阶段开始"
+        checklist:
+          - "确定Sprint目标"
+          - "选择用户故事"
+          - "估算工作量"
+          - "制定Sprint Backlog"
+      
+      daily_standup:
+        name: "每日站会"
+        duration: "15分钟"
+        participants: ["开发团队"]
+        aceflow_mapping: "D阶段检查点"
+        checklist:
+          - "昨天完成了什么"
+          - "今天计划做什么"
+          - "遇到什么障碍"
+      
+      sprint_review:
+        name: "Sprint评审会议"
+        duration: "1-2小时"
+        participants: ["产品负责人", "开发团队", "利益相关者"]
+        aceflow_mapping: "R阶段评审"
+        checklist:
+          - "演示已完成功能"
+          - "收集反馈意见"
+          - "更新产品Backlog"
+      
+      sprint_retrospective:
+        name: "Sprint回顾会议"
+        duration: "1小时"
+        participants: ["Scrum Master", "开发团队"]
+        aceflow_mapping: "R阶段总结"
+        checklist:
+          - "回顾Sprint过程"
+          - "识别改进点"
+          - "制定改进计划"
+    
+    artifacts:
+      product_backlog:
+        name: "产品Backlog"
+        description: "优先级排序的功能列表"
+        aceflow_file: "product_backlog.md"
+        
+      sprint_backlog:
+        name: "Sprint Backlog"
+        description: "当前Sprint的任务列表"
+        aceflow_file: "sprint_backlog.md"
+        
+      increment:
+        name: "产品增量"
+        description: "可工作的软件增量"
+        aceflow_file: "increment.md"
+    
+    integration:
+      workflow_mapping:
+        minimal:
+          P: "Sprint Planning → 规划Sprint目标和任务"
+          D: "Daily Scrum → 跟踪开发进度"
+          R: "Sprint Review & Retrospective → 评审和回顾"
+        
+        standard:
+          P1: "Product Backlog Refinement → 细化需求"
+          P2: "Sprint Planning → 规划Sprint"
+          D1: "Development + Daily Scrum → 开发实现"
+          D2: "Testing + Daily Scrum → 测试验证"
+          R1: "Sprint Review & Retrospective → 评审回顾"
+      
+      recommended_duration:
+        sprint_length: "2weeks"
+        min_sprint_length: "1week"
+        max_sprint_length: "4weeks"
+
+  kanban:
+    name: "Kanban"
+    description: "可视化工作流管理方法"
+    
+    principles:
+      - "可视化工作流"
+      - "限制在制品数量"
+      - "管理工作流"
+      - "明确流程策略"
+      - "反馈循环"
+      - "协作改进"
+    
+    board_config:
+      columns:
+        backlog:
+          name: "待办事项"
+          wip_limit: null
+          aceflow_mapping: "规划阶段任务"
+          
+        analysis:
+          name: "需求分析"
+          wip_limit: 3
+          aceflow_mapping: "P1阶段"
+          
+        development:
+          name: "开发中"
+          wip_limit: 5
+          aceflow_mapping: "D1/D2阶段"
+          
+        testing:
+          name: "测试中"
+          wip_limit: 3
+          aceflow_mapping: "D2阶段"
+          
+        review:
+          name: "代码评审"
+          wip_limit: 2
+          aceflow_mapping: "R1阶段"
+          
+        done:
+          name: "已完成"
+          wip_limit: null
+          aceflow_mapping: "已完成"
+    
+    metrics:
+      lead_time:
+        name: "前置时间"
+        description: "从开始到完成的总时间"
+        target: "<5天"
+        
+      cycle_time:
+        name: "周期时间"
+        description: "从开发开始到完成的时间"
+        target: "<3天"
+        
+      throughput:
+        name: "吞吐量"
+        description: "单位时间内完成的工作项数量"
+        target: ">2项/周"
+        
+      wip:
+        name: "在制品数量"
+        description: "同时进行的工作项数量"
+        target: "符合WIP限制"
+    
+    integration:
+      workflow_mapping:
+        minimal:
+          P: "Backlog → Analysis"
+          D: "Analysis → Development → Testing"  
+          R: "Testing → Review → Done"
+        
+        standard:
+          P1: "Backlog → Analysis"
+          P2: "Analysis完成"
+          D1: "Analysis → Development"
+          D2: "Development → Testing"
+          R1: "Testing → Review → Done"
+
+# 集成配置模板
+integration_templates:
+  scrum_minimal:
+    name: "Scrum + 轻量级模式"
+    config:
+      agile:
+        enabled: true
+        framework: "scrum"
+        iteration_length: "2weeks"
+        ceremonies:
+          planning: true
+          daily_standup: true
+          review: true
+          retrospective: true
+      
+      workflow_hooks:
+        stage_start:
+          P: "开始Sprint Planning"
+          D: "开始开发，启动Daily Scrum"
+          R: "准备Sprint Review"
+        
+        stage_complete:
+          P: "Sprint Backlog确定"
+          D: "功能开发完成"
+          R: "Sprint结束，准备下一个Sprint"
+  
+  kanban_standard:
+    name: "Kanban + 标准模式"
+    config:
+      agile:
+        enabled: true
+        framework: "kanban"
+        board_columns: ["Backlog", "Analysis", "Development", "Testing", "Review", "Done"]
+        wip_limits:
+          Analysis: 3
+          Development: 5
+          Testing: 3
+          Review: 2
+      
+      workflow_hooks:
+        task_create: "添加到Backlog"
+        stage_transition: "移动看板列"
+        stage_complete: "移动到Done列"
+
+# AI增强配置
+ai_enhancements:
+  scrum:
+    sprint_planning_assistant:
+      enabled: true
+      features:
+        - "工作量估算建议"
+        - "任务优先级排序"
+        - "团队能力评估"
+        - "风险识别"
+    
+    daily_standup_insights:
+      enabled: true
+      features:
+        - "进度异常检测"
+        - "阻碍因素分析"
+        - "团队协作建议"
+    
+    retrospective_analysis:
+      enabled: true
+      features:
+        - "数据驱动的改进建议"
+        - "团队效能分析"
+        - "趋势预测"
+  
+  kanban:
+    flow_optimization:
+      enabled: true
+      features:
+        - "瓶颈检测"
+        - "WIP限制优化建议"
+        - "流程效率分析"
+    
+    metrics_insights:
+      enabled: true
+      features:
+        - "前置时间分析"
+        - "吞吐量预测"
+        - "质量趋势监控"
